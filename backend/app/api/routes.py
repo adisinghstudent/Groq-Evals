@@ -49,19 +49,21 @@ async def evaluate_models(
         response2_text = response2.choices[0].message.content
         
         # Evaluate responses using the selected model
-        winner, reasoning, metrics = await evaluator.evaluate_responses(
-            request.prompt,
-            response1_text,
-            response2_text,
-            request.evaluator_model
+        evaluation_result = evaluator.evaluate_responses(
+            prompt=request.prompt,
+            response1=response1_text,
+            response2=response2_text,
+            model1_name=request.model1,
+            model2_name=request.model2,
+            evaluator_model=request.evaluator_model
         )
         
         return EvaluationResult(
             model1_response={"model_name": request.model1, "response": response1_text},
             model2_response={"model_name": request.model2, "response": response2_text},
-            winner=winner,
-            reasoning=reasoning,
-            metrics=metrics
+            winner=evaluation_result["winner"],
+            reasoning=evaluation_result["reasoning"],
+            metrics=evaluation_result["metrics"]
         )
         
     except Exception as e:

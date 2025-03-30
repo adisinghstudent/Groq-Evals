@@ -51,9 +51,17 @@ export default function Home() {
   return (
     <main className="min-h-screen p-8 bg-[#f8f8f8]">
       <div className="max-w-4xl mx-auto">
-        <h1 className="font-['Söhne'] text-[3.5rem] leading-[1.2] font-[350] text-[#1A2B3B] mb-12 text-center tracking-[-0.03em]">
-          Back at it, Evaluator
-        </h1>
+        <div className="relative mb-12">
+          <h1 className="font-['Söhne'] text-[3.5rem] leading-[1.2] font-[350] text-[#1A2B3B] text-center tracking-[-0.03em]">
+            Back at it, Evaluator
+          </h1>
+          {loading && (
+            <div className="absolute -bottom-6 left-0 w-full flex justify-center space-x-1">
+              <div className="h-0.5 w-1/3 bg-[#D4C3B1] animate-strobe-left rounded-full" />
+              <div className="h-0.5 w-1/3 bg-[#D4C3B1] animate-strobe-right rounded-full" />
+            </div>
+          )}
+        </div>
         
         <form onSubmit={handleSubmit} className="mb-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -171,7 +179,7 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-[#8B7355] text-sm">Reasoning:</p>
-                  <p className="text-[#374151] text-sm">{result.reasoning}</p>
+                  <p className="text-[#374151] text-sm whitespace-pre-wrap">{result.reasoning || 'No reasoning provided'}</p>
                 </div>
                 <div>
                   <p className="text-[#8B7355] text-sm">Response Statistics:</p>

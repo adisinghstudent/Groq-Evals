@@ -21,7 +21,7 @@ interface ModelsResponse {
 }
 
 export async function setApiKey(apiKey: string): Promise<void> {
-  const response = await fetch('http://localhost:8000/api/set-key', {
+  const response = await fetch('https://groq-evals.onrender.com/api/set-key', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export async function setApiKey(apiKey: string): Promise<void> {
 }
 
 export async function getAvailableModels(): Promise<ModelsResponse> {
-  const response = await fetch('http://localhost:8000/api/models');
+  const response = await fetch('https://groq-evals.onrender.com/api/models');
   if (!response.ok) {
     const error = await response.text();
     throw new Error(error);
@@ -50,7 +50,7 @@ export async function evaluatePrompt(
   model2: string,
   evaluatorModel: string
 ): Promise<EvaluationResult> {
-  const response = await fetch('http://localhost:8000/api/evaluate', {
+  const response = await fetch('https://groq-evals.onrender.com/api/evaluate', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

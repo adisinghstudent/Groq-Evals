@@ -23,27 +23,40 @@ interface ModelsResponse {
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://groq-evals.onrender.com/api';
 
 export async function setApiKey(apiKey: string): Promise<void> {
-  const response = await fetch(`${API_BASE_URL}/set-key`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ api_key: apiKey }),
-  });
+  try {
+    const response = await fetch(`${API_BASE_URL}/set-key`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ api_key: apiKey }),
+    });
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(error);
+    if (!response.ok) {
+      const error = await response.text();
+      console.error('Error setting API key:', error);
+      throw new Error(error);
+    }
+  } catch (error) {
+    console.error('Network error setting API key:', error);
+    throw error;
   }
 }
 
 export async function getAvailableModels(): Promise<ModelsResponse> {
-  const response = await fetch(`${API_BASE_URL}/models`);
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(error);
+  try {
+    console.log('Fetching models from:', `${API_BASE_URL}/models`);
+    const response = await fetch(`${API_BASE_URL}/models`);
+    if (!response.ok) {
+      const error = await response.text();
+      console.error('Error fetching models:', error);
+      throw new Error(error);
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Network error fetching models:', error);
+    throw error;
   }
-  return response.json();
 }
 
 export async function evaluatePrompt(
@@ -52,24 +65,30 @@ export async function evaluatePrompt(
   model2: string,
   evaluatorModel: string
 ): Promise<EvaluationResult> {
-  const response = await fetch(`${API_BASE_URL}/evaluate`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      prompt,
-      model1,
-      model2,
-      evaluator_model: evaluatorModel,
-      sequential: true,
-    }),
-  });
+  try {
+    const response = await fetch(`${API_BASE_URL}/evaluate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt,
+        model1,
+        model2,
+        evaluator_model: evaluatorModel,
+        sequential: true,
+      }),
+    });
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(error);
+    if (!response.ok) {
+      const error = await response.text();
+      console.error('Error evaluating prompt:', error);
+      throw new Error(error);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Network error evaluating prompt:', error);
+    throw error;
   }
-
-  return response.json();
 } 

@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: process.env.NEXT_PUBLIC_API_URL || "https://groq-evals.onrender.com/api/:path*",
+        destination: `${process.env.NEXT_PUBLIC_API_URL || 'https://groq-evals.onrender.com/api'}/:path*`,
       },
     ];
   },
@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
           { key: "Access-Control-Allow-Credentials", value: "true" },
           { key: "Access-Control-Allow-Origin", value: "*" },
           { key: "Access-Control-Allow-Methods", value: "GET,POST,OPTIONS" },
-          { key: "Access-Control-Allow-Headers", value: "X-Requested-With,content-type" },
+          { key: "Access-Control-Allow-Headers", value: "Content-Type, Authorization" },
         ],
       },
     ];

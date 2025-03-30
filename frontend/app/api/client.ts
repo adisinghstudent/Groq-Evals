@@ -49,11 +49,7 @@ export async function getAvailableModels(): Promise<ModelsResponse> {
   try {
     const url = `${API_BASE_URL}/models`;
     console.log('Fetching models from:', url);
-    const response = await fetch(url, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(url);
     
     if (!response.ok) {
       const error = await response.text();

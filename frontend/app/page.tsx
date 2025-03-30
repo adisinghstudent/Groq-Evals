@@ -9,17 +9,23 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<any>(null);
   const [availableModels, setAvailableModels] = useState<string[]>([]);
+  const [evaluationModels, setEvaluationModels] = useState<string[]>([]);
   const [model1, setModel1] = useState<string>('');
   const [model2, setModel2] = useState<string>('');
+  const [evaluatorModel, setEvaluatorModel] = useState<string>('');
 
   useEffect(() => {
     const fetchModels = async () => {
       try {
-        const models = await getAvailableModels();
-        setAvailableModels(models);
-        if (models.length >= 2) {
-          setModel1(models[0]);
-          setModel2(models[1]);
+        const response = await getAvailableModels();
+        setAvailableModels(response.models);
+        setEvaluationModels(response.evaluation_models);
+        if (response.models.length >= 2) {
+          setModel1(response.models[0]);
+          setModel2(response.models[1]);
+        }
+        if (response.evaluation_models.length > 0) {
+          setEvaluatorModel(response.evaluation_models[0]);
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch available models');
@@ -33,7 +39,7 @@ export default function Home() {
     setLoading(true);
     setError(null);
     try {
-      const response = await evaluatePrompt(prompt, model1, model2);
+      const response = await evaluatePrompt(prompt, model1, model2, evaluatorModel);
       setResult(response);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -50,7 +56,7 @@ export default function Home() {
         </h1>
         
         <form onSubmit={handleSubmit} className="mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
               <label className="block text-white mb-2">Model 1</label>
               <select
@@ -83,6 +89,22 @@ export default function Home() {
                 ))}
               </select>
             </div>
+            <div>
+              <label className="block text-white mb-2">Evaluator Model</label>
+              <select
+                value={evaluatorModel}
+                onChange={(e) => setEvaluatorModel(e.target.value)}
+                className="w-full p-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                required
+              >
+                <option value="">Select Evaluator</option>
+                {evaluationModels.map((model) => (
+                  <option key={model} value={model}>
+                    {model}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           <div className="mb-4">
             <label className="block text-white mb-2">Prompt</label>
@@ -96,9 +118,9 @@ export default function Home() {
           </div>
           <button
             type="submit"
-            disabled={loading || !model1 || !model2}
+            disabled={loading || !model1 || !model2 || !evaluatorModel}
             className={`w-full py-3 rounded-lg font-semibold text-white transition-colors ${
-              loading || !model1 || !model2
+              loading || !model1 || !model2 || !evaluatorModel
                 ? 'bg-blue-400 cursor-not-allowed'
                 : 'bg-blue-600 hover:bg-blue-700'
             }`}
@@ -139,7 +161,9 @@ export default function Home() {
 
             {/* Evaluation Results */}
             <div className="p-6 rounded-lg bg-blue-500/10 border border-blue-500">
-              <h2 className="text-xl font-semibold text-white mb-4">Evaluation Results</h2>
+              <h2 className="text-xl font-semibold text-white mb-4">
+                Evaluation Results (by {evaluatorModel})
+              </h2>
               <div className="space-y-4">
                 <div>
                   <p className="text-blue-400 font-medium">Winner:</p>
@@ -150,25 +174,12 @@ export default function Home() {
                   <p className="text-white">{result.reasoning}</p>
                 </div>
                 <div>
-                  <p className="text-blue-400 font-medium">Metrics:</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <h3 className="text-white font-medium">Scores</h3>
-                      <ul className="text-white space-y-1">
-                        <li>Model 1 Score: {(result.metrics.response1_score * 100).toFixed(1)}%</li>
-                        <li>Model 2 Score: {(result.metrics.response2_score * 100).toFixed(1)}%</li>
-                        <li>Evaluation Confidence: {(result.metrics.confidence * 100).toFixed(1)}%</li>
-                      </ul>
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="text-white font-medium">Response Statistics</h3>
-                      <ul className="text-white space-y-1">
-                        <li>Model 1 Length: {result.metrics.response1_length} words</li>
-                        <li>Model 2 Length: {result.metrics.response2_length} words</li>
-                        <li>Length Ratio: {result.metrics.length_ratio.toFixed(2)}</li>
-                      </ul>
-                    </div>
-                  </div>
+                  <p className="text-blue-400 font-medium">Response Statistics:</p>
+                  <ul className="text-white space-y-1">
+                    <li>Model 1 Length: {result.metrics.response1_length} words</li>
+                    <li>Model 2 Length: {result.metrics.response2_length} words</li>
+                    <li>Length Ratio: {result.metrics.length_ratio.toFixed(2)}</li>
+                  </ul>
                 </div>
               </div>
             </div>

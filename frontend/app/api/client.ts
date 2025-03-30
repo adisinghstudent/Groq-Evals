@@ -20,10 +20,12 @@ interface ModelsResponse {
   evaluation_models: string[];
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://groq-evals.onrender.com/api';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://groq-evals.onrender.com';
+const API_BASE_URL = `${BASE_URL}/api`;
 
 export async function setApiKey(apiKey: string): Promise<void> {
   try {
+    console.log('Setting API key at:', `${API_BASE_URL}/set-key`);
     const response = await fetch(`${API_BASE_URL}/set-key`, {
       method: 'POST',
       headers: {
@@ -34,7 +36,7 @@ export async function setApiKey(apiKey: string): Promise<void> {
 
     if (!response.ok) {
       const error = await response.text();
-      console.error('Error setting API key:', error);
+      console.error('Error setting API key:', error, 'Status:', response.status);
       throw new Error(error);
     }
   } catch (error) {
@@ -45,14 +47,22 @@ export async function setApiKey(apiKey: string): Promise<void> {
 
 export async function getAvailableModels(): Promise<ModelsResponse> {
   try {
-    console.log('Fetching models from:', `${API_BASE_URL}/models`);
-    const response = await fetch(`${API_BASE_URL}/models`);
+    const url = `${API_BASE_URL}/models`;
+    console.log('Fetching models from:', url);
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
     if (!response.ok) {
       const error = await response.text();
-      console.error('Error fetching models:', error);
+      console.error('Error fetching models:', error, 'Status:', response.status);
       throw new Error(error);
     }
-    return response.json();
+    const data = await response.json();
+    console.log('Received models data:', data);
+    return data;
   } catch (error) {
     console.error('Network error fetching models:', error);
     throw error;

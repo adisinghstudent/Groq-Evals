@@ -2,10 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async rewrites() {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://groq-evals.onrender.com';
     return [
       {
         source: "/api/:path*",
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'https://groq-evals.onrender.com/api'}/:path*`,
+        destination: `${baseUrl}/api/:path*`,
       },
     ];
   },

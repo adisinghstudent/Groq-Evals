@@ -25,13 +25,15 @@ export default function Home() {
         const response = await getAvailableModels();
         setAvailableModels(response.models);
         setEvaluationModels(response.evaluation_models);
-        if (response.models.length >= 2) {
-          setModel1(response.models[0]);
-          setModel2(response.models[1]);
-        }
-        if (response.evaluation_models.length > 0) {
-          setEvaluatorModel(response.evaluation_models[0]);
-        }
+        
+        // Set default models
+        const defaultModel1 = response.models.find(m => m === "gemma2-9b-it") || response.models[0];
+        const defaultModel2 = response.models.find(m => m === "llama-3.1-8b-instant") || response.models[1];
+        const defaultEvaluator = response.evaluation_models.find(m => m === "deepseek-r1-distill-llama-70b") || response.evaluation_models[0];
+        
+        setModel1(defaultModel1);
+        setModel2(defaultModel2);
+        setEvaluatorModel(defaultEvaluator);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch available models');
       }

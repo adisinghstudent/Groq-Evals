@@ -7,13 +7,12 @@ from typing import List
 load_dotenv()
 
 AVAILABLE_MODELS = [
+    "gemma2-9b-it",  # Default model 1
+    "llama-3.1-8b-instant",  # Default model 2
+    "deepseek-r1-distill-llama-70b",  # Default evaluator
     "qwen-2.5-coder-32b",
     "qwen-qwq-32b",
     "deepseek-r1-distill-qwen-32b",
-    "deepseek-r1-distill-llama-70b",
-    "gemma2-9b-it",
-    "distil-whisper-large-v3-en",
-    "llama-3.1-8b-instant",
     "llama-3.2-11b-vision-preview",
     "llama-3.2-1b-preview",
     "llama-3.2-3b-preview"
@@ -21,7 +20,7 @@ AVAILABLE_MODELS = [
 
 # Models suitable for evaluation (typically larger models)
 EVALUATION_MODELS = [
-    "deepseek-r1-distill-llama-70b",
+    "deepseek-r1-distill-llama-70b",  # Default evaluator
     "qwen-2.5-coder-32b",
     "llama-3.2-11b-vision-preview"
 ]

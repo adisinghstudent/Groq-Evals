@@ -1,8 +1,10 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 
 class PromptRequest(BaseModel):
     prompt: str
+    model1: str
+    model2: str
     
 class ModelResponse(BaseModel):
     model_name: str
@@ -13,4 +15,7 @@ class EvaluationResult(BaseModel):
     model2_response: ModelResponse
     winner: str
     reasoning: str
-    metrics: dict[str, float] 
+    metrics: dict[str, float]
+
+class ModelsListResponse(BaseModel):
+    models: List[str] 

@@ -15,13 +15,23 @@ interface EvaluationResult {
   };
 }
 
-export async function evaluatePrompt(prompt: string): Promise<EvaluationResult> {
+export async function getAvailableModels(): Promise<string[]> {
+  const response = await fetch('http://localhost:8000/api/models');
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(error);
+  }
+  const data = await response.json();
+  return data.models;
+}
+
+export async function evaluatePrompt(prompt: string, model1: string, model2: string): Promise<EvaluationResult> {
   const response = await fetch('http://localhost:8000/api/evaluate', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ prompt }),
+    body: JSON.stringify({ prompt, model1, model2 }),
   });
 
   if (!response.ok) {

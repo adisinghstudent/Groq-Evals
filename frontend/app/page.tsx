@@ -151,11 +151,24 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-blue-400 font-medium">Metrics:</p>
-                  <ul className="text-white space-y-2">
-                    <li>Length Ratio: {result.metrics.length_ratio.toFixed(2)}</li>
-                    <li>Response 1 Length: {result.metrics.response1_length} words</li>
-                    <li>Response 2 Length: {result.metrics.response2_length} words</li>
-                  </ul>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <h3 className="text-white font-medium">Scores</h3>
+                      <ul className="text-white space-y-1">
+                        <li>Model 1 Score: {(result.metrics.response1_score * 100).toFixed(1)}%</li>
+                        <li>Model 2 Score: {(result.metrics.response2_score * 100).toFixed(1)}%</li>
+                        <li>Evaluation Confidence: {(result.metrics.confidence * 100).toFixed(1)}%</li>
+                      </ul>
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-white font-medium">Response Statistics</h3>
+                      <ul className="text-white space-y-1">
+                        <li>Model 1 Length: {result.metrics.response1_length} words</li>
+                        <li>Model 2 Length: {result.metrics.response2_length} words</li>
+                        <li>Length Ratio: {result.metrics.length_ratio.toFixed(2)}</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

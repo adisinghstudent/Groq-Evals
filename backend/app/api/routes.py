@@ -1,32 +1,11 @@
 from fastapi import APIRouter, HTTPException, Depends
 from app.models.schemas import PromptRequest, EvaluationResult, ModelsListResponse
 from app.core.config import get_settings, Settings
+from app.core.evaluator import ModelEvaluator
 import groq
-import json
 
 router = APIRouter()
-
-def evaluate_responses(response1: str, response2: str) -> tuple[str, str, dict]:
-    # Simple evaluation logic (to be enhanced with more sophisticated metrics)
-    response1_len = len(response1.split())
-    response2_len = len(response2.split())
-    
-    # Basic metrics
-    metrics = {
-        "length_ratio": min(response1_len, response2_len) / max(response1_len, response2_len),
-        "response1_length": response1_len,
-        "response2_length": response2_len
-    }
-    
-    # Simple evaluation logic (this should be replaced with more sophisticated evaluation)
-    if response1_len > response2_len:
-        winner = "Model 1"
-        reasoning = "Provided a more detailed response based on length"
-    else:
-        winner = "Model 2"
-        reasoning = "Provided a more concise response"
-    
-    return winner, reasoning, metrics
+evaluator = ModelEvaluator()
 
 @router.get("/models", response_model=ModelsListResponse)
 async def get_available_models(settings: Settings = Depends(get_settings)):
@@ -63,8 +42,12 @@ async def evaluate_models(
         response1_text = response1.choices[0].message.content
         response2_text = response2.choices[0].message.content
         
-        # Evaluate responses
-        winner, reasoning, metrics = evaluate_responses(response1_text, response2_text)
+        # Evaluate responses using inspect-ai
+        winner, reasoning, metrics = await evaluator.evaluate_responses(
+            request.prompt,
+            response1_text,
+            response2_text
+        )
         
         return EvaluationResult(
             model1_response={"model_name": request.model1, "response": response1_text},

@@ -9,6 +9,9 @@ interface EvaluationResult {
   winner: string;
   reasoning: string;
   metrics: {
+    confidence: number;
+    response1_score: number;
+    response2_score: number;
     length_ratio: number;
     response1_length: number;
     response2_length: number;

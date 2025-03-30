@@ -5,3 +5,4 @@ groq==0.20.0
 pydantic==2.10.6
 pydantic-settings==2.2.1
 python-multipart==0.0.9
+inspect-ai

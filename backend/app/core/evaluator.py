@@ -1,15 +1,15 @@
-from inspect_ai import *
 from typing import Tuple, Dict
+import groq
 
 class ModelEvaluator:
-    def __init__(self):
-        self.inspector = Inspector()
+    def __init__(self, api_key: str):
+        self.client = groq.Groq(api_key=api_key)
 
-    async def evaluate_responses(self, prompt: str, response1: str, response2: str) -> Tuple[str, str, Dict]:
+    async def evaluate_responses(self, prompt: str, response1: str, response2: str, evaluator_model: str) -> Tuple[str, str, Dict]:
         # Create evaluation prompt
-        eval_prompt = f"""Given the following prompt and two model responses, evaluate which response is better:
+        eval_prompt = f"""You are an expert model response evaluator. Compare these two responses and determine which one is better.
 
-Prompt: {prompt}
+Original Prompt: {prompt}
 
 Response 1:
 {response1}
@@ -24,31 +24,35 @@ Evaluate based on:
 4. Completeness of the answer
 5. Conciseness without sacrificing quality
 
-Choose the better response and explain why."""
+Provide your evaluation in this format:
+Winner: [Model 1 or Model 2]
+Reasoning: [Your detailed explanation]
+"""
 
-        # Use inspect-ai's choice scorer
-        result = await self.inspector.choice(
-            options=[response1, response2],
-            prompt=eval_prompt,
-            criteria=[
-                "accuracy",
-                "relevance",
-                "clarity",
-                "completeness",
-                "conciseness"
-            ]
+        # Get evaluation from the selected model
+        evaluation = self.client.chat.completions.create(
+            messages=[{"role": "user", "content": eval_prompt}],
+            model=evaluator_model,
+            temperature=0.3  # Lower temperature for more consistent evaluations
         )
+        
+        evaluation_text = evaluation.choices[0].message.content
 
-        # Get the winner and explanation
-        winner_idx = result.choice
-        winner = "Model 1" if winner_idx == 0 else "Model 2"
-        reasoning = result.explanation
+        # Parse the evaluation result
+        try:
+            # Extract winner and reasoning from the evaluation text
+            winner_line = [line for line in evaluation_text.split('\n') if line.startswith('Winner:')][0]
+            reasoning_line = [line for line in evaluation_text.split('\n') if line.startswith('Reasoning:')][0]
+            
+            winner = winner_line.replace('Winner:', '').strip()
+            reasoning = reasoning_line.replace('Reasoning:', '').strip()
+        except:
+            # Fallback if parsing fails
+            winner = "Model 1" if len(response1) > len(response2) else "Model 2"
+            reasoning = "Evaluation parsing failed. Defaulting to length-based comparison."
 
-        # Calculate additional metrics
+        # Calculate metrics
         metrics = {
-            "confidence": result.confidence,
-            "response1_score": result.scores[0],
-            "response2_score": result.scores[1],
             "response1_length": len(response1.split()),
             "response2_length": len(response2.split()),
             "length_ratio": min(len(response1.split()), len(response2.split())) / 

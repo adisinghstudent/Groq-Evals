@@ -5,6 +5,7 @@ class PromptRequest(BaseModel):
     prompt: str
     model1: str
     model2: str
+    evaluator_model: str
     
 class ModelResponse(BaseModel):
     model_name: str
@@ -18,4 +19,5 @@ class EvaluationResult(BaseModel):
     metrics: dict[str, float]
 
 class ModelsListResponse(BaseModel):
-    models: List[str] 
+    models: List[str]
+    evaluation_models: List[str] 

@@ -19,9 +19,17 @@ AVAILABLE_MODELS = [
     "llama-3.2-3b-preview"
 ]
 
+# Models suitable for evaluation (typically larger models)
+EVALUATION_MODELS = [
+    "deepseek-r1-distill-llama-70b",
+    "qwen-2.5-coder-32b",
+    "llama-3.2-11b-vision-preview"
+]
+
 class Settings(BaseSettings):
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
     AVAILABLE_MODELS: List[str] = AVAILABLE_MODELS
+    EVALUATION_MODELS: List[str] = EVALUATION_MODELS
     
     class Config:
         env_file = ".env"

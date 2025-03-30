@@ -1,6 +1,9 @@
 from pydantic import BaseModel
 from typing import Optional, List
 
+class ApiKeyRequest(BaseModel):
+    api_key: str
+
 class PromptRequest(BaseModel):
     prompt: str
     model1: str

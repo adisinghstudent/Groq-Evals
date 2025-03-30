@@ -1,10 +1,36 @@
 from fastapi import APIRouter, HTTPException, Depends
-from app.models.schemas import PromptRequest, EvaluationResult, ModelsListResponse
+from app.models.schemas import PromptRequest, EvaluationResult, ModelsListResponse, ApiKeyRequest
 from app.core.config import get_settings, Settings
 from app.core.evaluator import ModelEvaluator
 import groq
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
+user_api_key = None
+
+@router.post("/set-key")
+async def set_api_key(request: ApiKeyRequest):
+    global user_api_key
+    try:
+        # Test the API key with a simpler model
+        client = groq.Groq(api_key=request.api_key)
+        # Try a simple completion to verify the key works
+        client.chat.completions.create(
+            messages=[{"role": "user", "content": "test"}],
+            model="llama-3.1-8b-instant",  # Using a more reliable model
+            max_tokens=1
+        )
+        user_api_key = request.api_key
+        return JSONResponse(content={"message": "API key set successfully"})
+    except Exception as e:
+        # Log the actual error for debugging
+        print(f"API Key validation error: {str(e)}")
+        if "401" in str(e):
+            raise HTTPException(status_code=401, detail="Invalid API key")
+        elif "429" in str(e):
+            raise HTTPException(status_code=429, detail="Rate limit exceeded. Please try again later.")
+        else:
+            raise HTTPException(status_code=400, detail=f"API key validation failed: {str(e)}")
 
 @router.get("/models", response_model=ModelsListResponse)
 async def get_available_models(settings: Settings = Depends(get_settings)):
@@ -18,8 +44,9 @@ async def evaluate_models(
     request: PromptRequest,
     settings: Settings = Depends(get_settings)
 ):
-    if not settings.GROQ_API_KEY:
-        raise HTTPException(status_code=500, detail="GROQ API key not configured")
+    global user_api_key
+    if not user_api_key:
+        raise HTTPException(status_code=401, detail="Please set your API key first")
     
     if request.model1 not in settings.AVAILABLE_MODELS:
         raise HTTPException(status_code=400, detail=f"Model 1 '{request.model1}' is not available")
@@ -30,8 +57,8 @@ async def evaluate_models(
     if request.evaluator_model not in settings.EVALUATION_MODELS:
         raise HTTPException(status_code=400, detail=f"Evaluator model '{request.evaluator_model}' is not available")
     
-    client = groq.Groq(api_key=settings.GROQ_API_KEY)
-    evaluator = ModelEvaluator(settings.GROQ_API_KEY)
+    client = groq.Groq(api_key=user_api_key)
+    evaluator = ModelEvaluator(user_api_key)
     
     try:
         # Get responses from both models

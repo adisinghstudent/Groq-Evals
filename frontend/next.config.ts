@@ -5,7 +5,20 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://groq-evals.onrender.com/api/:path*",
+        destination: process.env.NEXT_PUBLIC_API_URL || "https://groq-evals.onrender.com/api/:path*",
+      },
+    ];
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "Access-Control-Allow-Credentials", value: "true" },
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Access-Control-Allow-Methods", value: "GET,POST,OPTIONS" },
+          { key: "Access-Control-Allow-Headers", value: "X-Requested-With,content-type" },
+        ],
       },
     ];
   },

@@ -51,18 +51,18 @@ export default function Home() {
   return (
     <main className="min-h-screen p-8 bg-[#f8f8f8]">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">
-          Groq Model Evaluator
+        <h1 className="font-['Söhne'] text-[3.5rem] leading-[1.2] font-[350] text-[#1A2B3B] mb-12 text-center tracking-[-0.03em]">
+          Back at it, Evaluator
         </h1>
         
         <form onSubmit={handleSubmit} className="mb-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
-              <label className="block text-gray-700 mb-2 text-sm font-medium">Model 1</label>
+              <label className="block text-[#374151] mb-2 text-sm">Model 1</label>
               <select
                 value={model1}
                 onChange={(e) => setModel1(e.target.value)}
-                className="w-full p-2 rounded-lg bg-white/70 text-gray-800 border border-gray-200 focus:ring-2 focus:ring-brown-200 focus:outline-none shadow-sm backdrop-blur-sm"
+                className="w-full p-2 rounded-lg bg-[#E6D5C3]/20 text-[#374151] border border-[#D4C3B1] focus:ring-2 focus:ring-[#D4C3B1] focus:outline-none shadow-sm backdrop-blur-sm"
                 required
               >
                 <option value="">Select Model 1</option>
@@ -74,11 +74,11 @@ export default function Home() {
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 mb-2 text-sm font-medium">Model 2</label>
+              <label className="block text-[#374151] mb-2 text-sm">Model 2</label>
               <select
                 value={model2}
                 onChange={(e) => setModel2(e.target.value)}
-                className="w-full p-2 rounded-lg bg-white/70 text-gray-800 border border-gray-200 focus:ring-2 focus:ring-brown-200 focus:outline-none shadow-sm backdrop-blur-sm"
+                className="w-full p-2 rounded-lg bg-[#E6D5C3]/20 text-[#374151] border border-[#D4C3B1] focus:ring-2 focus:ring-[#D4C3B1] focus:outline-none shadow-sm backdrop-blur-sm"
                 required
               >
                 <option value="">Select Model 2</option>
@@ -90,11 +90,11 @@ export default function Home() {
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 mb-2 text-sm font-medium">Evaluator Model</label>
+              <label className="block text-[#374151] mb-2 text-sm">Evaluator Model</label>
               <select
                 value={evaluatorModel}
                 onChange={(e) => setEvaluatorModel(e.target.value)}
-                className="w-full p-2 rounded-lg bg-white/70 text-gray-800 border border-gray-200 focus:ring-2 focus:ring-brown-200 focus:outline-none shadow-sm backdrop-blur-sm"
+                className="w-full p-2 rounded-lg bg-[#E6D5C3]/20 text-[#374151] border border-[#D4C3B1] focus:ring-2 focus:ring-[#D4C3B1] focus:outline-none shadow-sm backdrop-blur-sm"
                 required
               >
                 <option value="">Select Evaluator</option>
@@ -107,19 +107,19 @@ export default function Home() {
             </div>
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2 text-sm font-medium">Prompt</label>
+            <label className="block text-[#374151] mb-2 text-sm">How can I help you today?</label>
             <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="Enter your prompt here..."
-              className="w-full h-32 p-4 rounded-lg bg-white/70 text-gray-800 placeholder-gray-400 border border-gray-200 focus:ring-2 focus:ring-brown-200 focus:outline-none shadow-sm backdrop-blur-sm"
+              className="w-full h-32 p-4 rounded-lg bg-white/70 text-[#374151] placeholder-[#374151]/50 border border-gray-200 focus:ring-2 focus:ring-[#D4C3B1] focus:outline-none shadow-sm backdrop-blur-sm text-sm"
               required
             />
           </div>
           <button
             type="submit"
             disabled={loading || !model1 || !model2 || !evaluatorModel}
-            className={`w-full py-3 rounded-lg font-medium text-gray-800 transition-colors shadow-sm ${
+            className={`w-full py-3 rounded-lg text-[#374151] transition-colors shadow-sm text-sm ${
               loading || !model1 || !model2 || !evaluatorModel
                 ? 'bg-[#E6D5C3] cursor-not-allowed opacity-50'
                 : 'bg-[#E6D5C3] hover:bg-[#D4C3B1] hover:shadow-md'
@@ -130,7 +130,7 @@ export default function Home() {
         </form>
 
         {error && (
-          <div className="p-4 mb-8 rounded-lg bg-red-50/80 border border-red-200 text-red-600 backdrop-blur-sm">
+          <div className="p-4 mb-8 rounded-lg bg-red-50/80 border border-red-200 text-red-600 backdrop-blur-sm text-sm">
             {error}
           </div>
         )}
@@ -140,20 +140,20 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Model 1 Response */}
               <div className="p-6 rounded-lg bg-white/70 border border-gray-200 shadow-sm backdrop-blur-sm">
-                <h2 className="text-xl font-medium text-gray-800 mb-4">
+                <h2 className="text-lg text-[#374151] mb-4">
                   {result.model1_response.model_name}
                 </h2>
-                <p className="text-gray-700 whitespace-pre-wrap">
+                <p className="text-[#374151] whitespace-pre-wrap text-sm">
                   {result.model1_response.response}
                 </p>
               </div>
 
               {/* Model 2 Response */}
               <div className="p-6 rounded-lg bg-white/70 border border-gray-200 shadow-sm backdrop-blur-sm">
-                <h2 className="text-xl font-medium text-gray-800 mb-4">
+                <h2 className="text-lg text-[#374151] mb-4">
                   {result.model2_response.model_name}
                 </h2>
-                <p className="text-gray-700 whitespace-pre-wrap">
+                <p className="text-[#374151] whitespace-pre-wrap text-sm">
                   {result.model2_response.response}
                 </p>
               </div>
@@ -161,21 +161,21 @@ export default function Home() {
 
             {/* Evaluation Results */}
             <div className="p-6 rounded-lg bg-[#E6D5C3]/20 border border-[#D4C3B1] shadow-sm backdrop-blur-sm">
-              <h2 className="text-xl font-medium text-gray-800 mb-4">
+              <h2 className="text-lg text-[#374151] mb-4">
                 Evaluation Results (by {evaluatorModel})
               </h2>
               <div className="space-y-4">
                 <div>
-                  <p className="text-[#8B7355] font-medium text-sm">Winner:</p>
-                  <p className="text-gray-800">{result.winner} ({result.winner === 'Model 1' ? model1 : model2})</p>
+                  <p className="text-[#8B7355] text-sm">Winner:</p>
+                  <p className="text-[#374151] text-sm">{result.winner} ({result.winner === 'Model 1' ? model1 : model2})</p>
                 </div>
                 <div>
-                  <p className="text-[#8B7355] font-medium text-sm">Reasoning:</p>
-                  <p className="text-gray-800">{result.reasoning}</p>
+                  <p className="text-[#8B7355] text-sm">Reasoning:</p>
+                  <p className="text-[#374151] text-sm">{result.reasoning}</p>
                 </div>
                 <div>
-                  <p className="text-[#8B7355] font-medium text-sm">Response Statistics:</p>
-                  <ul className="text-gray-800 space-y-1 mt-2">
+                  <p className="text-[#8B7355] text-sm">Response Statistics:</p>
+                  <ul className="text-[#374151] space-y-1 mt-2 text-sm">
                     <li>Model 1 Length: {result.metrics.response1_length} words</li>
                     <li>Model 2 Length: {result.metrics.response2_length} words</li>
                     <li>Length Ratio: {result.metrics.length_ratio.toFixed(2)}</li>

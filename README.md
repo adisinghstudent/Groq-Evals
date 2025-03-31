@@ -1,7 +1,7 @@
 # 🚀 Groq Model Evaluator
 
 <div align="center">
-  <img src="demo.png" alt="Groq Model Evaluator Demo" width="800" />
+  <img src="frontend/public/demo.png" alt="Groq Model Evaluator Demo" width="1200" />
   
   <p align="center">
     <strong>Compare and evaluate different Groq models with ease</strong>

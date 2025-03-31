@@ -1,4 +1,4 @@
-# 🚀 [groq-evals](https://grok-evals.vercel.app)
+# 🚀 [groq-evals](https://groq-evals.vercel.app)
 <div align="center">
   <img src="./frontend/public/demo.png" alt="Groq Model Evaluator Demo" width="1200" />
   

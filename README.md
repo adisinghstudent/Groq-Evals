@@ -1,5 +1,4 @@
-# 🚀 Groq Model Evaluator
-
+# 🚀 [groq-evals](https://grok-evals.vercel.app)
 <div align="center">
   <img src="./frontend/public/demo.png" alt="Groq Model Evaluator Demo" width="1200" />
   
@@ -83,17 +82,6 @@ npm run dev
 - Automatic evaluation of response quality
 - Detailed reasoning for model selection
 
-### Evaluation Metrics
-- Semantic similarity scoring
-- Response length analysis
-- Quality metrics for each model
-- Visual progress bars for easy comparison
-
-### User Experience
-- Real-time evaluation updates
-- Secure API key storage
-- Responsive design for all devices
-- Intuitive model selection interface
 
 ## 🤝 Contributing
 
@@ -127,7 +115,7 @@ git push origin feature/amazing-feature
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License 
 
 ## 🙏 Acknowledgments
 
@@ -145,5 +133,5 @@ Have questions? Need help? Feel free to:
 ---
 
 <div align="center">
-  Made with ❤️ by the Groq Evaluator Team
+  Made with ❤️ by Adi
 </div> 

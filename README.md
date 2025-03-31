@@ -14,12 +14,13 @@ Groq Model Evaluator is a powerful web application that allows you to compare an
 ### ✨ Key Features
 
 - 🔄 Side-by-side model comparison
-- 📊 Comprehensive evaluation metrics
-- 🎯 Semantic similarity analysis
 - 🤖 Automated reasoning about model performance
-- 📈 Visual metric representations
 - 🎨 Beautiful, responsive UI
 - 🔑 Secure API key management
+Yet to come:
+- 📈 Visual metric representations
+- 📊 Comprehensive evaluation metrics
+- 🎯 Semantic similarity analysis
 
 ## 🚀 Getting Started
 

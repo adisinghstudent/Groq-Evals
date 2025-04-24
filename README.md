@@ -1,4 +1,4 @@
-# 🚀 [groq-evals](https://groq-evals.vercel.app)
+# 🚀 [Eval](https://eval.adisingh.com)
 <div align="center">
   <img src="./frontend/public/demo.png" alt="Groq Model Evaluator Demo" width="1200" />
   
